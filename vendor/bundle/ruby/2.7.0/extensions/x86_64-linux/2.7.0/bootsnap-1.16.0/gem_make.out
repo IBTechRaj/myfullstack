@@ -1,0 +1,18 @@
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.16.0/ext/bootsnap
+/usr/share/rvm/rubies/ruby-2.7.0/bin/ruby -I /usr/share/rvm/rubies/ruby-2.7.0/lib/ruby/site_ruby/2.7.0 extconf.rb
+creating Makefile
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1jl8lup sitelibdir\=./.gem.20230513-15280-1jl8lup clean
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1jl8lup sitelibdir\=./.gem.20230513-15280-1jl8lup
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.so
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1jl8lup sitelibdir\=./.gem.20230513-15280-1jl8lup install
+/usr/bin/install -m 0755 bootsnap.so ./.gem.20230513-15280-1jl8lup/bootsnap
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.16.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1jl8lup sitelibdir\=./.gem.20230513-15280-1jl8lup clean

@@ -1,0 +1,18 @@
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+/usr/share/rvm/rubies/ruby-2.7.0/bin/ruby -I /usr/share/rvm/rubies/ruby-2.7.0/lib/ruby/site_ruby/2.7.0 extconf.rb
+creating Makefile
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1xm6j1c sitelibdir\=./.gem.20230513-15280-1xm6j1c clean
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1xm6j1c sitelibdir\=./.gem.20230513-15280-1xm6j1c
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1xm6j1c sitelibdir\=./.gem.20230513-15280-1xm6j1c install
+/usr/bin/install -m 0755 websocket_mask.so ./.gem.20230513-15280-1xm6j1c
+
+current directory: /home/raj/myfullstack/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20230513-15280-1xm6j1c sitelibdir\=./.gem.20230513-15280-1xm6j1c clean
