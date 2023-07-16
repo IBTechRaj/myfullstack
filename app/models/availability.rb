@@ -14,6 +14,7 @@
     scope :sp_details, ->(sp_id, availability_date) {
       find_by(service_provider_id: sp_id, availability_date: availability_date)
     }
+    
 
     validates_presence_of :availability_date, :start_time, :end_time
     # validate :check_date
