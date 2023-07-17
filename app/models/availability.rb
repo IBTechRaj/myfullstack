@@ -14,7 +14,7 @@
     scope :sp_details, ->(sp_id, availability_date) {
       find_by(service_provider_id: sp_id, availability_date: availability_date)
     }
-    
+
 
     validates_presence_of :availability_date, :start_time, :end_time
     # validate :check_date
@@ -102,6 +102,7 @@
       errors.add(:slot_error, 'You have already slot for the day') if slot.present?
     end
 
+    
     def set_params
       self.availability_date = Date.parse(self.availability_date).strftime(DMY_FORMAT)
       self.start_time = Time.parse(self.start_time).strftime(IMP_FORMAT)
