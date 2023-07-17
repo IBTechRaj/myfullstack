@@ -49,3 +49,4 @@ cp views/student_email_verification_mailer/....html.erb
 cp ......text.erb
 cp PasswordValidation
 config/environment/development.rb .. SMTP creds
+# myfullstack
