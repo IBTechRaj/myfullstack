@@ -1,4 +1,6 @@
-class ServiceProviderAvailabilitySerializer < BuilderBase::BaseSerializer
+class ServiceProviderAvailabilitySerializer 
+  
+include FastJsonapi::ObjectSerializer
     attributes *[:service_provider_id,
                  :start_time,
                  :end_time,

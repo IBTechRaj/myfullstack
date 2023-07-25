@@ -1,0 +1,9 @@
+#   mirrors: [ amazon, google, microsoft ]
+minio:
+  service: S3
+  access_key_id: <%= ENV['STORAGE_ACCESS_KEY'] || 'hello' %>
+  secret_access_key: <%= ENV['STORAGE_SECRET_ACCESS_KEY'] || 'builderai' %>
+  region: <%= ENV['STORAGE_REGION'] || 'builder-1' %>
+  bucket: <%= ENV['STORAGE_BUCKET'] || 'sbucket' %>
+  endpoint: <%= ENV['STORAGE_ENDPOINT'] || 'https://minio.b290480.dev.eastus.az.svc.builder.cafe' %>
+  force_path_style:  true

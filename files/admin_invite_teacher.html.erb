@@ -1,0 +1,23 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+  <title>Verify Your Account</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="background-color: #F5F5F5; font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+     <p style="float: right;"> <%= image_tag attachments['lingoamojr.png'].url %> </p>
+     <br>
+    <h3 style="color: #333333; text-align: left;"><strong>Invitation</strong></h3>
+    <p style="color: #333333;text-align: center;"><strong>Hi, <%= @invite_teacher.first_name %> </strong></p>
+<p style="color: #333333;text-align: center;"><strong>We invite you to join our language platform.<br> Please click the link below:</strong></p>
+<br><%= @url %>
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="<%= @url %>" style="background-color:#6D5996 ; color: #FFFFFF; text-decoration: none; padding: 10px 100px; border-radius: 5px;"> Join Lingoamo</a>
+    </div>
+<br><br>
+    <p style="color: #333333;text-align: center;"><strong>The Lingoamo team</strong></p>   
+  </div>
+</body>
+</html>

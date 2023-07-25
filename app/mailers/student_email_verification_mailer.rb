@@ -16,6 +16,6 @@ class StudentEmailVerificationMailer < ApplicationMailer
   private
 
   def encoded_token
-    JsonWebToken.encode @student.id, 60.minutes.from_now
+    JsonWebToken.encode @student.id, 1.days.from_now
   end
 end
