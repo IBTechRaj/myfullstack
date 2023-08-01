@@ -87,7 +87,7 @@
       @teacher = Teacher.find_by(email: email)
       client_url = request.headers[:origin] || 'Client Url Missing' #params[:origin]
       if @teacher 
-        TeacherEmailValidationMailer.teacher_email_validation(@teacher, request.base_url, client_url).deliver_now!
+        TeacherEmailVerificationMailer.teacher_email_verification(@teacher, request.base_url, client_url).deliver_now!
           render json: {message: 'Email sent again please check'}, status: :ok
         else
           render json: { message: 'No teacher found with this email'}

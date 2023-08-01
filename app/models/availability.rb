@@ -30,7 +30,7 @@ class Availability < ApplicationRecord
       where(
         availability_date: Date.parse(date).strftime(DMY_FORMAT)
       ).order(:available_slots_count)&.first&.service_provider }
-    
+   
       after_create :create_time_slots, :update_slot_count
 
     def todays_online_hours
@@ -70,69 +70,19 @@ class Availability < ApplicationRecord
       slots
     end
 
-    def update_slots_list(params = nil)
-      already_booked_slots = get_booked_slots(Date.strptime(self.availability_date, DMY_FORMAT)) 
+  def update_slots_list(p_list)
+   
+      already_booked_slots = get_booked_slots(Date.strptime(self.availability_date, DMY_FORMAT))
       availability = self
       return errors.add(
         :availability, 'Service provider is unavailable for today'
       ) unless availability.present?
-
-      if availability.timeslots.present?
-        slots = availability.timeslots
-      else
-        slots = TimeSlotsCalculator.new.calculate_time_slots(
-          availability.start_time, availability.end_time, 59
-        )
-      end
-
- already_slot = slots.select { |sl| 
-# byebug
-# already data slots format
-(sl["from"].to_time.strftime("%I:%M") == params[:time_slots][0][:start_time] || sl["to"].to_time.strftime("%I:%M") == params[:time_slots][0][:end_time])  } #&& sl[:sno] != params["sno"].to_s }
-# calculated data slots format
-          # (sl[:from].to_time.strftime("%I:%M %p") == params[:time_slots][0][:start_time] || sl[:to].to_time.strftime("%I:%M %p") == params[:time_slots][0][:end_time])  } #&& sl[:sno] != params["sno"].to_s }
-          return errors.add(:slot_error, 'Cannot Change. You have different slot for same time')   if already_slot.present?
-
-
-
-
+      slots = TimeSlotsCalculator.new.calculate_time_slots(
+        availability.start_time, availability.end_time, 59
+      )
       slots.each_with_index do |slot, index|
+        # byebug
         next if slot[:booked_status]
-
-    #  byebug
-        if params.present? && slot["sno"] == params[:time_slots][0][:sno].to_s 
-          if slot[:from] == params[:time_slots][0][:start_time] && slot[:to] == params[:time_slots][0][:end_time]
-            return errors.add(:slot_error, 'You already have same slot for same time') 
-          else
-            slot[:from] =  (params[:time_slots][0][:start_time].to_time).strftime("%I:%M %p")
-            slot[:to] = (params[:time_slots][0][:end_time].to_time - 1.minute).strftime("%I:%M %p") # params[:time_slots][0][:end_time]
-          end
-        end        
-      end
-
-          if params[:time_slots][1].present?
-            start_sno = slots.empty? ? 1 :  slots.last["sno"].to_i + 1
-            addl_slots = params["time_slots"][1]
-             already_slot = slots.select { |sl| 
-             
-# byebug
-
-# already data slots format
-
-# (sl["from"].to_time == params[:time_slots][0][:start_time] || sl["to"].to_time == params[:time_slots][0][:end_time])  } #&& sl[:sno] != params["sno"].to_s }
-
-(sl["from"].to_time.strftime("%I:%M") == params[:time_slots][1][:start_time].to_time.strftime("%I:%M") || sl["to"].to_time.strftime("%I:%M") == params[:time_slots][1][:end_time].to_time.strftime("%I:%M"))  }
-# calculated slots list format
-          #  (sl[:from].to_time.strftime("%I:%M %p") == params[:time_slots][1][:start_time].to_time || sl[:to].to_time.strftime("%I:%M %p") == params[:time_slots][1][:end_time].to_time)  }
-          return errors.add(:slot_error, 'Cannot Add. You have different slot for same time')   if already_slot.present?
-
-            s_time = params["time_slots"][1][:start_time]
-            e_time = params["time_slots"][1][:end_time]
-            new_slots = TimeSlotsCalculator.new.calculate_time_slots( s_time, e_time,  59, start_sno)
-           
-            slots += new_slots        
-        end
-
         already_booked_slots.each do |booked_slot|
           if (Time.parse(slot[:from])..Time.parse(slot[:to])).cover?(booked_slot[:start_time])
             slot[:booked_status] = true
@@ -143,11 +93,35 @@ class Availability < ApplicationRecord
             end
           end
         end
-    #  byebug
-      self.update(timeslots: slots)
-      self.update_slot_count
-      slots
-    end
+      end
+      
+    #   params[:time_slots].each do |time_slot|
+    p_list.each do |time_slot|
+        # byebug
+        self.timeslots.each_with_index do |slot, index|
+          already_slot =  (slot["from"].to_time.strftime("%I:%M")  == time_slot["start_time"].to_time.strftime("%I:%M") || slot["to"].to_time.strftime("%I:%M") == time_slot["end_time"].to_time.strftime("%I:%M")) && (time_slot["sno"].present? && time_slot["sno"] != slot["sno"].to_i || !time_slot["sno"].present?)
+          byebug
+          if already_slot.present?
+            return errors.add(:slot_error, 'Cannot Add. You have a different slot for the same time')
+            break
+          end
+          if time_slot["sno"].present? && slot["sno"] == time_slot["sno"].to_s
+              slot["from"] = time_slot[:start_time].to_time.strftime("%I:%M %p")
+              slot["to"] = (time_slot[:end_time].to_time - 1.minute).strftime("%I:%M %p")
+          end
+        end  
+        if !time_slot["sno"].present?
+          start_sno = self.timeslots.empty? ? 1 : self.timeslots.last["sno"].to_i + 1
+          s_time = time_slot[:start_time]
+          e_time = time_slot[:end_time]
+          new_slots = TimeSlotsCalculator.new.calculate_time_slots(s_time, e_time, 59, start_sno)
+          self.timeslots += new_slots
+        end
+      end
+      self.update(timeslots: self.timeslots)
+      self.timeslots
+  end    
+
 
     def update_slot_count
       available_slots_count = self.slots_list.select{|time| time[:booked_status] == false }.count
@@ -195,6 +169,12 @@ class Availability < ApplicationRecord
     end
 
 # to be uncommented later
+      def initialize(*args)
+      super
+      self.timeslots ||= [] # Ensure timeslots is initialized as an empty array if not set
+      end
+
+
 
     def create_time_slots
       new_time_slots = TimeSlotsCalculator.new.calculate_time_slots(
@@ -203,14 +183,3 @@ class Availability < ApplicationRecord
       self.update_column("timeslots", new_time_slots)
     end
   end
-# end
-
- # addl_slots.each do |t_slot, value|
-              # puts t_slot #, value
-              # puts t_slot[:start_time].to_time
-            #  new_slots = TimeSlotsCalculator.new.calculate_time_slots( t_slot, t_slot[:end_time],  59, 4)
-            
-              # t_slot["start_time"].to_time.strftime("%I:%M %p"), t_slot["end_time"].to_time.strftime("%I:%M %p"),
-              # t_slot[:start_time].to_time.strftime("%I:%M %p"), t_slot[:end_time].to_time.strftime("%I:%M %p"),
-            # start_sno =  slots.last["sno"].to_i + 1
-            # new_slot_arr << new_slot

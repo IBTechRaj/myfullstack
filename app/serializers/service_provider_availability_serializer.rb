@@ -17,7 +17,8 @@ include FastJsonapi::ObjectSerializer
       private
 
       def slots_for availability
-        availability.slots_list
+        availability.timeslots
+        # availability.slots_list
       end
     end
   end

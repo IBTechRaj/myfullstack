@@ -4,6 +4,7 @@ module AccountBlock
 		require 'date'
 
 		belongs_to :teacher
+		has_many :language_classes, class_name:'BxBlockClasses::LanguageClass', dependent: :destroy
 
 		validates :language, presence: true
 		validates :language_course_title, presence: true

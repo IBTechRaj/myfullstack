@@ -37,5 +37,8 @@ module BxBlockClasses
         end
       end
 
+      def class_end_time
+        class_time + 90.minutes
+      end
 	end
 end

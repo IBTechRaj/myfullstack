@@ -12,9 +12,13 @@ class TimeSlotsCalculator
       until total_working_minutes < 0 do
         start_time_key = "#{(Time.parse(new_start_time).strftime("%I:%M %p"))}"
         end_time_key = "#{(Time.parse(new_start_time) + slot_duration.minute).strftime("%I:%M %p")}"
+        # new_time_slots << {
+        #   from: start_time_key, to: end_time_key, booked_status: false, sno: "#{(sno)}"
+        # }
         new_time_slots << {
-          from: start_time_key, to: end_time_key, booked_status: false, sno: "#{(sno)}"
+          "from"=> start_time_key, "to"=> end_time_key, booked_status: false, "sno"=> "#{(sno)}"
         }
+        puts new_time_slots
         new_start_time = (Time.parse(new_start_time) + (slot_duration + 1).minute).strftime("%I:%M %p")
         total_working_minutes -= slot_duration
         sno += 1

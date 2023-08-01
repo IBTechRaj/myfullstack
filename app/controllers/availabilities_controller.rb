@@ -106,7 +106,7 @@ class AvailabilitiesController < ApplicationController
       unless availability.present?
         return render json: { error: 'Availability not found' }, status: :not_found
       end
-      slots = availability.update_slots_list(params)
+      slots = availability.update_slots_list(params[:time_slots])
       render json: { availability_date: availability.availability_date, time_slots: slots  }    
     end      
 
@@ -120,12 +120,24 @@ class AvailabilitiesController < ApplicationController
     end
 
     def destroy
-      @availability = Availability.find(params[:id])
-      if @availability.destroy
-      render json: {message: 'deleted  availability for this date'}, status: :ok
-    else
-      render json: {errors: 'cannot find this date'}, status: :unprocessable_entity
-      end
+       @availability = Availability.find(params[:id])
+        sno_to_delete = params[:sno]
+        deleted_timeslot = @availability[:timeslots].find { |timeslot| timeslot["sno"].to_i == sno_to_delete.to_i }
+
+        if deleted_timeslot
+          @availability[:timeslots].delete(deleted_timeslot)
+          @availability.save
+
+          render json: { message: 'Deleted availability for this timeslot' }, status: :ok
+        else
+          render json: { errors: 'This Timeslot not found' }, status: :unprocessable_entity
+        end
+    #   @availability = Availability.find(params[:id])
+    #   if @availability.destroy
+    #   render json: {message: 'deleted  availability for this date'}, status: :ok
+    # else
+    #   render json: {errors: 'cannot find this date'}, status: :unprocessable_entity
+    #   end
     end
 
     private
